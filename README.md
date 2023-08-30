@@ -11,5 +11,5 @@ further information of each can be found in their respective folders.
 For any queries, contact us at
 
 - [Discord](https://discordapp.com/users/788652727365402644)
-- [Email](mailto:kalpit2311@gmail.com)
-- [Email](mailto:yagnikposhiya.updates@gmail.com)
+- [Email](mailto:kalpit2311@gmail.com) Kalpit Shah
+- [Email](mailto:yagnikposhiya.updates@gmail.com) Yagnik Poshiya
