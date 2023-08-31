@@ -8,6 +8,8 @@ Charotar University of Science and Technology.
 import os
 import discord
 import responses
+from dotenv import load_dotenv
+load_dotenv()
 
 async def send_messages(message, usermessage, username, is_private):
     try:
@@ -40,4 +42,4 @@ def runCREDPAssistant():
 
         await send_messages(message, usermessage, username, is_private=False)
 
-    bot.run('MTE0MTY2NTk2MjE2NTI4OTAxMg.GCrIvM.vKbwWZbEST5mBkRHoZtLwxfb5m8mNtBZUEjgRk')
+    bot.run(os.getenv('TOKEN'))
