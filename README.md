@@ -1,4 +1,4 @@
-Welcome to CREDP Assistance System
+Welcome to CREDP Assistant System
 
 ## Introduction
 
