@@ -1,6 +1,4 @@
 python-dotenv
 discord
 requests
-json
-datetime
 pytz
