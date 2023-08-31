@@ -1,1 +1,7 @@
 Flask
+os
+discord
+requests
+json
+datetime
+pytz
