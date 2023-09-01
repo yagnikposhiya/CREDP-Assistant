@@ -11,10 +11,23 @@ import requests
 import pytz
 
 
-def getStudentAttendanceData():
+def getStudentAttendanceData(usermessage):
+  # base_link = 'https://credp-backend.onrender.com/student-attendance/6/2023-08-29'
+  # link = ''
+  # input_date = ''
+  
+  # if usermessage.startswith('/student-attendance-summary'):
+  #   input_date = str(usermessage.split('/student-attendance-summary ',1)[1])
+  #   link = base_link + input_date
 
-  fetched_data = requests.get('')
+  # if usermessage.startswith('/student-attendance'):
+  #   input_params = usermessage.split(' ')
+  #   link = base_link + str(input_params[2]) + '/' + str(input_params[1])
+    
+  
+  fetched_data = requests.get('https://credp-backend.onrender.com/volunteer-attendance/2023-08-29')
   json_format_data = json.loads(fetched_data.text)
+
   return json_format_data
 
 
@@ -41,8 +54,9 @@ def handleResponse(username, usermessage):
   if usermessage == '//help':
     return 'Use /hello, /student-attendance, /volunteer-attendance commands'
 
-  if usermessage.startswith('/student-attendance'):
-    return str('Available soon!')
+  if usermessage.startswith('/student-attendance-summary') or usermessage.startswith('/student-attendance'):
+    attendance_summary = getStudentAttendanceData(usermessage)
+    return attendance_summary
 
   if usermessage.startswith('/volunteer-attendance'):
-    return str('Updating the database, please wait!')
+    return str('Available soon!')
