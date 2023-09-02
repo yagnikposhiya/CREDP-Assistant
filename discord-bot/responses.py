@@ -45,9 +45,9 @@ def getStudentAttendanceData(usermessage):
       if len(input_date) < 3:
         link = base_link + YMD_format_date
       else:
-        return str('CommandFormatError:\nOnly date in the DD-MM-YYYY format is acceptable for /student-atdsum command.')
+        return str('CommandFormatError:\nOnly date in DD-MM-YYYY format is acceptable for /student-atdsum command.')
     except:
-      return str('CommandFormatError:\nDate not found, must be in the DD-MM-YYYY format.')
+      return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
 
   elif usermessage.startswith('/student-atd'):
     try:
@@ -62,9 +62,9 @@ def getStudentAttendanceData(usermessage):
       if len(input_params) < 4:
         link = base_link + str(input_params[2]) + '/' + YMD_format_date
       else:
-        return str('CommandFormatError:\nOnly date in the DD-MM-YYYY format & single standard is acceptable for /student-atd command.')
+        return str('CommandFormatError:\nOnly date in DD-MM-YYYY format & single standard is acceptable for /student-atd command.')
     except:
-      return str('CommandFormatError:\nEither date or standard not found, must be in the <DD-MM-YYYY> <STD> format.')
+      return str('CommandFormatError:\nEither date or standard not found, must be in <DD-MM-YYYY> <STD> format.')
   
   fetched_data = requests.get(link)
   json_format_data = json.loads(fetched_data.text)
@@ -78,8 +78,8 @@ def getStudentAttendanceData(usermessage):
       return 'Data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
 
 
-def getVolunteerAttendanceData():
-  fetchd_data = requests.get('')
+def getVolunteerAttendanceData(usermessage):
+  fetchd_data = requests.get('https://credp-backend.onrender.com/volunteer-attendance/2023-08-29')
   json_format_data = json.loads(fetchd_data.text)
   return json_format_data
 
@@ -96,5 +96,6 @@ def handleResponse(username, usermessage):
     attendance_summary = getStudentAttendanceData(usermessage)
     return attendance_summary
 
-  if usermessage.startswith('/volunteer-attendance'):
-    return str('Available soon!')
+  if usermessage.startswith('/volunteer-atd'):
+    attendance_summary = getVolunteerAttendanceData(usermessage)
+    return attendance_summary
