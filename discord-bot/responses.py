@@ -9,6 +9,7 @@ import json
 import datetime
 import requests
 import pytz
+import datashare
 
 
 def getDateInYMDFormat(date):
@@ -120,7 +121,8 @@ def handleResponse(username, usermessage):
 
   if usermessage.startswith('/student-atd') or usermessage.startswith('/student-atdsum'):
     attendance_summary = getStudentAttendanceData(usermessage)
-    return attendance_summary
+    status = datashare.getExcelFile(attendance_summary)
+    return status
 
   if usermessage.startswith('/volunteer-atd'):
     attendance_summary = getVolunteerAttendanceData(usermessage)
