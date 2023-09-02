@@ -17,7 +17,17 @@ def getDateInYMDFormat(date):
   return str(output_date)
 
 
+def getDayFromDate(date):
+  try:
+    date_object = datetime.datetime.strptime(date, '%d-%m-%Y').date()
+    day = date_object.strftime('%A')
+    return day
+  except:
+    return str('DateFormatError:\nEither input date is invalid or it must be in DD-MM-YYYY format.')
+
+
 def getStudentAttendanceData(usermessage):
+  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   base_link = 'https://credp-backend.onrender.com/student-attendance/'
   link = ''
   input_date = ''
@@ -25,6 +35,11 @@ def getStudentAttendanceData(usermessage):
   if usermessage.startswith('/student-atdsum'):
     try:
       input_date = usermessage.split(' ')
+      day = getDayFromDate(input_date[1])
+
+      if day not in days:
+        return day
+      
       return_date = input_date[1]
       YMD_format_date = getDateInYMDFormat(input_date[1])
       if len(input_date) < 3:
@@ -37,6 +52,11 @@ def getStudentAttendanceData(usermessage):
   elif usermessage.startswith('/student-atd'):
     try:
       input_params = usermessage.split(' ')
+      day = getDayFromDate(input_params[1])
+
+      if day not in days:
+        return day
+      
       return_date = input_params[1]
       YMD_format_date = getDateInYMDFormat(input_params[1])
       if len(input_params) < 4:
@@ -62,15 +82,6 @@ def getVolunteerAttendanceData():
   fetchd_data = requests.get('')
   json_format_data = json.loads(fetchd_data.text)
   return json_format_data
-
-
-def getDayFromDate(date):
-  try:
-    date_object = datetime.datetime.strptime(date, '%d-%m-%Y').date()
-    day = date_object.strftime('%A')
-    return day
-  except:
-    return 'Invalid date format'
 
 
 def handleResponse(username, usermessage):
