@@ -63,6 +63,7 @@ def getStudentAttendanceData(usermessage):
         link = base_link + str(input_params[2]) + '/' + YMD_format_date
       else:
         return str('CommandFormatError:\nOnly date in DD-MM-YYYY format & single standard is acceptable for /student-atd command.')
+        
     except:
       return str('CommandFormatError:\nEither date or standard not found, must be in <DD-MM-YYYY> <STD> format.')
   
@@ -79,9 +80,34 @@ def getStudentAttendanceData(usermessage):
 
 
 def getVolunteerAttendanceData(usermessage):
-  fetchd_data = requests.get('https://credp-backend.onrender.com/volunteer-attendance/2023-08-29')
+  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  base_link = 'https://credp-backend.onrender.com/volunteer-attendance/'
+  link = ''
+
+  try:
+    input_params = usermessage.split(' ')
+    day = getDayFromDate(input_params[1])
+
+    if day not in days:
+      return day
+
+    YMD_format_date = getDateInYMDFormat(input_params[1])
+
+    if len(input_params) < 3:
+      link = base_link + YMD_format_date
+    else:
+      return str('CommandFormatError:\nOnly date in DD-MM-YYYY format is acceptable for /volunteer-atd command.')
+  
+  except:
+    return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
+    
+  fetchd_data = requests.get(link)
   json_format_data = json.loads(fetchd_data.text)
-  return json_format_data
+
+  if len(json_format_data) > 0:
+    return json_format_data
+  else:
+    return 'Data is not available for {gd}.'.format(gd=input_params[1])
 
 
 def handleResponse(username, usermessage):
