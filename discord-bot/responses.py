@@ -11,6 +11,12 @@ import requests
 import pytz
 
 
+def getDateInYMDFormat(date):
+  input_date = datetime.datetime.strptime(date,"%d-%m-%Y")
+  output_date = input_date.strftime("%Y-%m-%d")
+  return str(output_date)
+
+
 def getStudentAttendanceData(usermessage):
   base_link = 'https://credp-backend.onrender.com/student-attendance/'
   link = ''
@@ -19,8 +25,10 @@ def getStudentAttendanceData(usermessage):
   if usermessage.startswith('/student-atdsum'):
     try:
       input_date = usermessage.split(' ')
+      return_date = input_date[1]
+      YMD_format_date = getDateInYMDFormat(input_date[1])
       if len(input_date) < 3:
-        link = base_link + input_date[1]
+        link = base_link + YMD_format_date
       else:
         return str('CommandFormatError:\nOnly date in the DD-MM-YYYY format is acceptable for /student-atdsum command.')
     except:
@@ -29,19 +37,25 @@ def getStudentAttendanceData(usermessage):
   elif usermessage.startswith('/student-atd'):
     try:
       input_params = usermessage.split(' ')
+      return_date = input_params[1]
+      YMD_format_date = getDateInYMDFormat(input_params[1])
       if len(input_params) < 4:
-        link = base_link + str(input_params[2]) + '/' + str(input_params[1])
+        link = base_link + str(input_params[2]) + '/' + YMD_format_date
       else:
         return str('CommandFormatError:\nOnly date in the DD-MM-YYYY format & single standard is acceptable for /student-atd command.')
     except:
       return str('CommandFormatError:\nEither date or standard not found, must be in the <DD-MM-YYYY> <STD> format.')
   
-    
-  
   fetched_data = requests.get(link)
   json_format_data = json.loads(fetched_data.text)
 
-  return json_format_data
+  if len(json_format_data) > 0:
+    return json_format_data
+  else:
+    if usermessage.startswith('/student-atdsum'):
+      return 'Data is not available for {gd}.'.format(gd=return_date)
+    elif usermessage.startswith('/student-atd'):
+      return 'Data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
 
 
 def getVolunteerAttendanceData():
