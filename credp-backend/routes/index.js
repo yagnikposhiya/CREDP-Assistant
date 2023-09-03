@@ -60,7 +60,7 @@ router.get('/student-attendance/:std/:date', async (req, res) => {
             return {
                 name: item.student.name,
                 student_id: item.student_id,
-                present: item.present,
+                present: item.present?1:0,
             };
         }
         );
