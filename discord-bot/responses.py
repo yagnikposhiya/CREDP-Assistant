@@ -120,10 +120,10 @@ def handleResponse(username, usermessage):
 
   if usermessage.startswith('/student-atd') or usermessage.startswith('/student-atdsum'):
     attendance_summary = getStudentAttendanceData(usermessage)
-    status = datashare.getCSVFile(attendance_summary,username,'S_')
+    status = datashare.getCSVFile(attendance_summary,usermessage,username,'S_')
     return status
 
   if usermessage.startswith('/volunteer-atd'):
     attendance_summary = getVolunteerAttendanceData(usermessage)
-    status = datashare.getCSVFile(attendance_summary,username,'V_')
+    status = datashare.getCSVFile(attendance_summary,usermessage,username,'V_')
     return status
