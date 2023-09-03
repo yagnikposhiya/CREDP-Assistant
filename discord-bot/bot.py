@@ -13,7 +13,12 @@ import responses
 async def send_messages(message, usermessage, username, is_private):
   try:
     response = responses.handleResponse(username,usermessage)
-    await message.author.send(response) if is_private else await message.channel.send(response)
+
+    if os.path.isfile(response):
+      file = discord.File(response)
+      await message.channel.send(file=file)
+    else:
+      await message.author.send(response) if is_private else await message.channel.send(response)
 
   except Exception as exception:
     print(exception)
