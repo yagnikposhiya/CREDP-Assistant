@@ -11,9 +11,10 @@ import datetime
 import reportlab
 import pandas as pd
 from tabulate import tabulate
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.lib import colors, pdfmetrics
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 
@@ -27,8 +28,12 @@ def CSVToPDF(file_path_csv,username,prefix):
   file_path_pdf = base_path + file
 
   table_data = []
+  
+  pdfmetrics.registerFont(TTFont('TimesNewRoman', 'fonts/TimesNewRoman/times-new-roman.ttf'))
 
-  pdfmetrics.registerFont(TTFont('Times-Roman', 'fonts/Times New Roman/times new roman.ttf'))
+  styles = getSampleStyleSheet()
+  custom_font_style = styles['Normal'].clone('CustomFontStyle')
+  custom_font_style.fontName = 'TimesNewRoman'
   
 
   with open(file_path_csv,'r') as f:
@@ -39,7 +44,8 @@ def CSVToPDF(file_path_csv,username,prefix):
   pdf = SimpleDocTemplate(file_path_pdf, pagesize=landscape(letter))
   table = Table(table_data)
   table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), (0.7, 0.7, 0.7))]))
-  table.setStyle(TableStyle([('FONTSIZE', (0, 0), (-1, -1), 12, 'Times-Roman')]))
+  table.setStyle(TableStyle([('FONTSIZE', (0, 0), (-1, -1), 12)]))
+  table.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), 'TimesNewRoman')]))
   pdf.build([table])
 
   return str('Attendance sheet (in pdf) is generated')
@@ -66,12 +72,13 @@ def getCSVFile(json_data,usermessage,username,prefix):
       new_column_names.append(col_name_dict[col])
 
   dataframe.columns = new_column_names
-  
-  dataframe['Standard'].fillna(0, inplace=True)
-  dataframe['Standard'] = dataframe['Standard'].astype(int)
-  dataframe['Department'] = dataframe['Department'].str.upper()
-  dataframe['Institute'] = dataframe['Institute'].str.upper()
-  dataframe['Student-ID'] = dataframe['Student-ID'].str.upper()
+
+  if usermessage.startswith('/volunteer-atd'):
+    dataframe['Standard'].fillna(0, inplace=True)
+    dataframe['Standard'] = dataframe['Standard'].astype(int)
+    dataframe['Department'] = dataframe['Department'].str.upper()
+    dataframe['Institute'] = dataframe['Institute'].str.upper()
+    dataframe['Student-ID'] = dataframe['Student-ID'].str.upper()
   
   if 'Present' in dataframe.columns:
     if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd'):
