@@ -18,7 +18,7 @@ from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph, Spacer
 
 
-def CSVToPDF(file_path_csv,usermessage,username,prefix):
+def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
   # required variables
   base_path = 'attendance-sheet-pdf/'
   username_formatted = ''.join(username.split())
@@ -85,6 +85,19 @@ def CSVToPDF(file_path_csv,usermessage,username,prefix):
   table.setStyle(TableStyle([('FONTSIZE', (0, 0), (-1, -1), 12)]))
   table.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), 'TimesNewRoman')]))
   content.append(table)
+
+  # add extra metadata for student attendance summary
+  if usermessage.startswith('/student-atdsum'):
+    content.append(Spacer(1, 0.2 * 150))
+    text = f"Total Students: {dataframe['Total'].sum()}"
+    text_style = ParagraphStyle(name='CustomSignatureStyle', fontSize=12, fontName='TimesNewRoman', alignment=1)
+    addon_data = Paragraph(text, text_style)
+    content.append(addon_data)
+
+    text = f"Total Present Students: {dataframe['Present'].sum()}"
+    text_style = ParagraphStyle(name='CustomSignatureStyle', fontSize=12, fontName='TimesNewRoman', alignment=1)
+    addon_data = Paragraph(text, text_style)
+    content.append(addon_data)
   
   # build the pdf document
   pdf.build(content)
@@ -126,7 +139,7 @@ def getCSVFile(json_data,usermessage,username,prefix):
       dataframe['Present'] = dataframe['Present'].replace({0:'No',1:'Yes'})
 
   dataframe.to_csv(file_path,index=False)
-  response_file_path = CSVToPDF(file_path,usermessage,username,prefix)
+  response_file_path = CSVToPDF(file_path,dataframe,usermessage,username,prefix)
   
   return response_file_path
   
