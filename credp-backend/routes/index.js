@@ -93,5 +93,38 @@ router.get('/volunteer-attendance/:date', async (req, res) => {
 
 });
 
+//get all student attendance for given date with student name , std , student_id , present 
+
+router.get('/student-attendance/all/:date', async (req, res) => {
+    try{
+            
+            const { date } = req.params;
+            const studentAttendance = await StudentAttendance.findAll({
+                where: {
+                date,
+                },
+                include: {
+                    model: Student,
+                    attributes: ['name'],
+                },
+            });
+            const response = studentAttendance.map((item) => {
+                return {
+                    name: item.student.name,
+                    student_id: item.student_id,
+                    std: item.std,
+                    present: item.present?1:0,
+                };
+            }
+            );
+            res.json(response);
+                
+        }
+
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 module.exports = router;
