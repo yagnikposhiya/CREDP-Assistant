@@ -95,11 +95,10 @@ router.get('/volunteer-attendance/:date', async (req, res) => {
 
 //get all student attendance for given date with student name , std , student_id , present 
 
-router.get('/student-attendance/all/:date', async (req, res) => {
+router.get('/student-attendance-all/:date', async (req, res) => {
     try{
-            
             const { date } = req.params;
-            const studentAttendance = await StudentAttendance.findAll({
+            const studentAttendance = await StudentAttandance.findAll({
                 where: {
                 date,
                 },
