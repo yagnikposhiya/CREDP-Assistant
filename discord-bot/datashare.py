@@ -11,6 +11,7 @@ import datetime
 import reportlab
 import pandas as pd
 from tabulate import tabulate
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -36,6 +37,10 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
       date_of_atd = usermessage.split(' ')
       date_of_atd = date_of_atd[1]
       atd_string = 'Student Attendance'
+    elif usermessage.startswith('/student-atdall'):
+      date_of_atd = usermessage.split(' ')
+      date_of_atd = date_of_atd[1]
+      atd_string = 'Student Attendance | Std. All'
     else:
       params = usermessage.split(' ')
       atd_string = 'Student Attendance | Std. ' + str(params[2])
@@ -79,7 +84,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
     for row in csv_reader:
       table_data.append(row)
 
-  pdf = SimpleDocTemplate(file_path_pdf, pagesize=landscape(letter))
+  pdf = SimpleDocTemplate(file_path_pdf, pagesize=landscape((792,842)))
   table = Table(table_data)
   table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), (0.7, 0.7, 0.7))]))
   table.setStyle(TableStyle([('FONTSIZE', (0, 0), (-1, -1), 12)]))
@@ -135,11 +140,16 @@ def getCSVFile(json_data,usermessage,username,prefix):
     dataframe['Student-ID'] = dataframe['Student-ID'].str.upper()
   
   if 'Present' in dataframe.columns:
-    if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd'):
+    if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd') or usermessage.startswith('/student-atdall'):
       dataframe['Present'] = dataframe['Present'].replace({0:'No',1:'Yes'})
 
   dataframe.to_csv(file_path,index=False)
-  response_file_path = CSVToPDF(file_path,dataframe,usermessage,username,prefix)
-  
-  return response_file_path
+
+  params = usermessage.split(' ')
+  file_format = params[-1]
+  if file_format == 'CSV':
+    return file_path
+  else:
+    response_file_path = CSVToPDF(file_path,dataframe,usermessage,username,prefix)
+    return response_file_path
   
