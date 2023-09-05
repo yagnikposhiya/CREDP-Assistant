@@ -78,6 +78,7 @@ def getStudentAttendanceData(usermessage):
 
   elif usermessage.startswith('/student-atd'):
     try:
+      standards = ['1','2','3','4','5','6','7','8','9','10','11','12']
       input_params = usermessage.split(' ')
       day = getDayFromDate(input_params[1])
 
@@ -87,12 +88,14 @@ def getStudentAttendanceData(usermessage):
       return_date = input_params[1]
       YMD_format_date = getDateInYMDFormat(input_params[1])
       if len(input_params) < 5:
-        if len(input_params) == 4 and usermessage.split(' ')[-1] != "CSV":
+        if input_params[2] not in standards:
+          return str('CommandFormatError:\nStandard not found, Should fall within the range of 1 to 12.')
+        elif len(input_params) == 4 and usermessage.split(' ')[-1] != "CSV":
           return str('FileFormatError:\nOnly "CSV" file format is acceptable for /student-atd command. The PDF format is available by default.')
         else:
           link = base_link + str(input_params[2]) + '/' + YMD_format_date
       else:
-        return str('CommandFormatError:\nOnly date in DD-MM-YYYY format, single standard, & "CSV" file format are acceptable for /student-atd command.')
+        return str('CommandFormatError:\nOnly date in DD-MM-YYYY format, single standard, & "CSV" file format (optional) are acceptable for /student-atd command.')
         
     except:
       return str('CommandFormatError:\nEither date or standard not found, must be in <DD-MM-YYYY> <STD> format.')
