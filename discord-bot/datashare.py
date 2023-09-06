@@ -11,6 +11,7 @@ import datetime
 import reportlab
 import pandas as pd
 from tabulate import tabulate
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -87,8 +88,19 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
   pdf = SimpleDocTemplate(file_path_pdf, pagesize=landscape((792,842)))
   table = Table(table_data)
   table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), (0.7, 0.7, 0.7))]))
+  table.setStyle(TableStyle([('BOX', (0, 0), (-1, 0), 1, colors.black)]))
   table.setStyle(TableStyle([('FONTSIZE', (0, 0), (-1, -1), 12)]))
   table.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), 'TimesNewRoman')]))
+
+  # add bounding box to the entry which has "No" value in the "Present" column
+  if 'Present' in dataframe.columns:
+    if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd') or usermessage.startswith('/student-atdall'):
+      column_index = dataframe.columns.get_loc('Present')
+      for i, row in enumerate(table_data[1:], start=1):
+        if row[column_index] == 'No':
+          table.setStyle(TableStyle([('BACKGROUND', (0, i), (-1, i), (0.7,0.7,0.7)),
+                                     ('TEXTCOLOR', (0, i), (-1, i), colors.black),
+                                     ('INNERGRID', (0, i), (-1, i), 1, (0.7,0.7,0.7))]))
   content.append(table)
 
   # add extra metadata for student attendance summary
