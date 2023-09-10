@@ -33,13 +33,17 @@ async def send_messages(message, usermessage, username, is_private):
     print(exception)
 
 # define function for sending scheduled messages
-@tasks.loop(seconds=10)
+local_timezone = pytz.timezone('Asia/Kolkata')
+time_stamp_1 = datetime.time(hour=16,minute=52,tzinfo=local_timezone)
+time_stamp_2 = datetime.time(hour=18,minute=01,tzinfo=local_timezone)
+time_stamp_3 = datetime.time(hour=18,minute=30,tzinfo=local_timezone)
+time_stamp_4 = datetime.time(hour=00,minute=30,tzinfo=local_timezone)
+time_stamp_5 = datetime.time(hour=22,minute=15,tzinfo=local_timezone)
+time_stamps = [time_stamp_1,time_stamp_2,time_stamp_3,time_stamp_4,time_stamp_5]
+@tasks.loop(time=time_stamps)
 async def send_scheduled_messages():
   channel = bot.get_channel(1142402656351039538)
-  local_timezone = pytz.timezone('Asia/Kolkata')
-  now = datetime.datetime.now(local_timezone)
-  if now.hour==15 and now.minute==43:
-    await channel.send('Good evening!')
+  await channel.send('I have completed my nth task, I am here only!')
 
 """
 create class for setting setup_hook for proper concurrent execution 
