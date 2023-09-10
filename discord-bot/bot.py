@@ -35,7 +35,7 @@ async def send_messages(message, usermessage, username, is_private):
 # define function for sending scheduled messages
 local_timezone = pytz.timezone('Asia/Kolkata')
 time_stamp_1 = datetime.time(hour=16,minute=52,tzinfo=local_timezone)
-time_stamp_2 = datetime.time(hour=18,minute=01,tzinfo=local_timezone)
+time_stamp_2 = datetime.time(hour=18,minute=1,tzinfo=local_timezone)
 time_stamp_3 = datetime.time(hour=18,minute=30,tzinfo=local_timezone)
 time_stamp_4 = datetime.time(hour=00,minute=30,tzinfo=local_timezone)
 time_stamp_5 = datetime.time(hour=22,minute=15,tzinfo=local_timezone)
