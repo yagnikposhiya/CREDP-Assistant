@@ -16,8 +16,6 @@ from discord.ext import commands, tasks
 
 intents = discord.Intents.default()
 intents.message_content = True
-# bot = commands.Bot(command_prefix='!',intents=intents)
-# bot = discord.Client(intents=intents)
 
 async def send_messages(message, usermessage, username, is_private):
   try:
@@ -34,17 +32,11 @@ async def send_messages(message, usermessage, username, is_private):
 
 @tasks.loop(seconds=10)
 async def send_scheduled_messages():
-  print('I am ready')
   channel = bot.get_channel(1142402656351039538)
-  print('First stage is complete')
   local_timezone = pytz.timezone('Asia/Kolkata')
-  # while not bot.is_closed():
   now = datetime.datetime.now(local_timezone)
-  print(now)
-  if now.hour==15 and now.minute==27:
-    print('You are on the time')
+  if now.hour==15 and now.minute==43:
     await channel.send('Good evening!')
-  print('This is the last point')
 
 class CREDPAssistant(commands.Bot):
   async def setup_hook(self):
