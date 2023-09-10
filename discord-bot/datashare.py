@@ -7,14 +7,15 @@ Charotar University of Science and Technology
 
 import csv
 import pytz
+import PyPDF2
 import datetime
 import reportlab
 import pandas as pd
-from tabulate import tabulate
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from pypdf import PdfWriter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph, Spacer
@@ -26,7 +27,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
   username_formatted = ''.join(username.split())
   local_timezone = pytz.timezone('Asia/Kolkata')
   current_time = datetime.datetime.now(local_timezone)
-  format_time = current_time.strftime('%d-%m-%Y_%I%M%p')
+  format_time = current_time.strftime('%d-%m-%Y_%I%M%S%p')
   file = prefix + username_formatted + '_' + format_time + '.pdf'
   file_path_pdf = base_path + file
   table_data = []
@@ -121,7 +122,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
 
   return file_path_pdf
 
-
+# create CSV file from the dataframe
 def getCSVFile(json_data,usermessage,username,prefix):
   col_name_dict = {'std':'Standard','total':'Total','present':'Present','absent':'Absent','name':'Name','student_id':'Student-ID',
                   'student_name':'Student Name', 'department':'Department','institute':'Institute','in_time':'In-Time','out_time':'Out-Time'}
@@ -130,7 +131,7 @@ def getCSVFile(json_data,usermessage,username,prefix):
   username_formatted = ''.join(username.split())
   local_timezone = pytz.timezone('Asia/Kolkata')
   current_time = datetime.datetime.now(local_timezone)
-  format_time = current_time.strftime('%d-%m-%Y_%I%M%p')
+  format_time = current_time.strftime('%d-%m-%Y_%I%M%S%p')
   file = prefix + username_formatted + '_' + format_time + '.csv'
   file_path = base_path + file # generate file path
 
@@ -170,4 +171,23 @@ def getCSVFile(json_data,usermessage,username,prefix):
   else:
     response_file_path = CSVToPDF(file_path,dataframe,usermessage,username,prefix)
     return response_file_path
+
+
+def PDFMerger(input_files_path,username):
+  base_path = 'attendance-sheet-pdf/'
+  prefix = 'VS_'
+  username_formatted = ''.join(username.split())
+  local_timezone = pytz.timezone('Asia/Kolkata')
+  current_time = datetime.datetime.now(local_timezone)
+  format_time = current_time.strftime('%d-%m-%Y_%I%M%S%p')
+  file = prefix + username_formatted + '_' + format_time + '.pdf'
+  output_file_path = base_path + file
   
+  merger = PdfWriter()
+  for pdf in input_files_path:
+    merger.append(pdf)
+
+  merger.write(output_file_path)
+  merger.close()
+
+  return output_file_path

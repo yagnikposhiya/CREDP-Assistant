@@ -10,6 +10,7 @@ import discord
 import asyncio
 import datetime
 import responses
+import datashare
 from discord.ext import commands, tasks
 # from dotenv import load_dotenv
 # load_dotenv()
@@ -17,8 +18,12 @@ from discord.ext import commands, tasks
 # create intents for CREDP Assistant
 intents = discord.Intents.default()
 intents.message_content = True # give access to bot to read message content
+input_files = [] # created for self bot messages
 
-# define function as main end point for responses.py & datashare.py
+"""
+define function as main end point for responses.py & datashare.py;
+for user message only
+"""
 async def send_messages(message, usermessage, username, is_private):
   try:
     response = responses.handleResponse(username,usermessage)
@@ -32,19 +37,66 @@ async def send_messages(message, usermessage, username, is_private):
   except Exception as exception:
     print(exception)
 
+
+"""
+define function as main end point for responses.py & datashare.py;
+for self bot message only
+"""
+async def self_messages(send_channel,botmessage,botname,merged_status=False):
+  global input_files
+  try:
+
+    if not merged_status:
+      response = responses.handleResponse(botname,botmessage)
+    
+      if os.path.isfile(response):
+        input_files.append(response)
+      else:
+        await send_channel.send(response)
+        
+    else:
+      response = datashare.PDFMerger(input_files,botname)
+
+      if os.path.isfile(response):
+        file = discord.File(response)
+        input_files = [] # again intialize the input_files list as an empty list
+        await send_channel.send(file=file)
+      else:
+        await send_channel.send('FileNotFoundError:\nThe file you requested could not be located.')
+
+  except Exception as exception:
+    print(exception)
+
+
 # define function for sending scheduled messages
 local_timezone = pytz.timezone('Asia/Kolkata')
-time_stamp_1 = datetime.time(hour=16,minute=52,tzinfo=local_timezone)
-time_stamp_2 = datetime.time(hour=18,minute=1,tzinfo=local_timezone)
+time_stamp_1 = datetime.time(hour=19,minute=52,tzinfo=local_timezone)
+time_stamp_2 = datetime.time(hour=18,minute=41,tzinfo=local_timezone)
 time_stamp_3 = datetime.time(hour=18,minute=30,tzinfo=local_timezone)
-time_stamp_4 = datetime.time(hour=00,minute=30,tzinfo=local_timezone)
+time_stamp_4 = datetime.time(hour=1,minute=15,tzinfo=local_timezone)
 time_stamp_5 = datetime.time(hour=22,minute=15,tzinfo=local_timezone)
 time_stamps = [time_stamp_1,time_stamp_2,time_stamp_3,time_stamp_4,time_stamp_5]
 @tasks.loop(time=time_stamps)
 async def send_scheduled_messages():
-  channel = bot.get_channel(1142402656351039538)
-  await channel.send('I have completed my nth task, I am here only!')
+  global input_files
+  input_files = [] # again assign empty list to the global variable
+  channel_name = bot.get_channel(1148543686804783104) # attendance-record channel
+  botmessages = ['/volunteer-atd ','/student-atdsum ','/student-atdall ']
+  merged_status = False
+  today_date = datetime.date.today()
+  # today_date_mdy = today_date.strftime('%d-%m-%Y')
+  today_date_mdy = '06-09-2023'
+  botname = str(bot.user.display_name)
 
+  for index,bmsg in enumerate(botmessages):
+    botmessage = bmsg + today_date_mdy
+    if index == 2:
+      merged_status = True
+    await self_messages(channel_name,botmessage,botname)
+
+  if merged_status:
+    await self_messages(channel_name,botmessage,botname,merged_status)
+  
 """
 create class for setting setup_hook for proper concurrent execution 
 of scheduled_messages and other functionality of CREDP Assistant
