@@ -11,12 +11,14 @@ import requests
 import datashare
 
 
+# get date in specific format: from DMY to YMD
 def getDateInYMDFormat(date):
   input_date = datetime.datetime.strptime(date,"%d-%m-%Y")
   output_date = input_date.strftime("%Y-%m-%d")
   return str(output_date)
 
 
+# get day from the date
 def getDayFromDate(date):
   try:
     date_object = datetime.datetime.strptime(date, '%d-%m-%Y').date()
@@ -26,6 +28,7 @@ def getDayFromDate(date):
     return str('DateFormatError:\nEither input date is invalid or it must be in DD-MM-YYYY format.')
 
 
+# fetch student attendance data from the database
 def getStudentAttendanceData(usermessage):
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   if usermessage.startswith('/student-atdall'):
@@ -34,7 +37,8 @@ def getStudentAttendanceData(usermessage):
     base_link = 'https://credp-backend.onrender.com/student-attendance/'
   link = ''
   input_date = ''
-  
+
+  # for student attendance summary (/student-atdsum)
   if usermessage.startswith('/student-atdsum'):
     try:
       input_date = usermessage.split(' ')
@@ -55,6 +59,7 @@ def getStudentAttendanceData(usermessage):
     except:
       return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
 
+  # for all student attendance (/student-atdall)
   elif usermessage.startswith('/student-atdall'):
     try:
       input_params = usermessage.split(' ')
@@ -76,6 +81,7 @@ def getStudentAttendanceData(usermessage):
     except:
       return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
 
+  # for specific standard student attendance (/student-atd)
   elif usermessage.startswith('/student-atd'):
     try:
       standards = ['1','2','3','4','5','6','7','8','9','10','11','12']
@@ -99,10 +105,12 @@ def getStudentAttendanceData(usermessage):
         
     except:
       return str('CommandFormatError:\nEither date or standard not found, must be in <DD-MM-YYYY> <STD> format.')
-  
+
+  # fetch data from the link and convert it into json format
   fetched_data = requests.get(link)
   json_format_data = json.loads(fetched_data.text)
 
+  # handle the case when data not found in the database
   if len(json_format_data) > 0:
     return json_format_data
   else:
@@ -112,6 +120,7 @@ def getStudentAttendanceData(usermessage):
       return 'Data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
 
 
+# fetch volunteer attendance data from the database
 def getVolunteerAttendanceData(usermessage):
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   base_link = 'https://credp-backend.onrender.com/volunteer-attendance/'
@@ -133,16 +142,18 @@ def getVolunteerAttendanceData(usermessage):
   
   except:
     return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
-    
+
+  # fetch data from the database after generation of link
   fetchd_data = requests.get(link)
   json_format_data = json.loads(fetchd_data.text)
 
+  # handle the case when data not found in the database
   if len(json_format_data) > 0:
     return json_format_data
   else:
     return 'Data is not available for {gd}.'.format(gd=input_params[1])
 
-
+# define the function to handle the user messages and CREDP Assistant responses
 def handleResponse(username, usermessage):
 
   if usermessage == '/hello':

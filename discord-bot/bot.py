@@ -14,9 +14,11 @@ from discord.ext import commands, tasks
 # from dotenv import load_dotenv
 # load_dotenv()
 
+# create intents for CREDP Assistant
 intents = discord.Intents.default()
-intents.message_content = True
+intents.message_content = True # give access to bot to read message content
 
+# define function as main end point for responses.py & datashare.py
 async def send_messages(message, usermessage, username, is_private):
   try:
     response = responses.handleResponse(username,usermessage)
@@ -30,6 +32,7 @@ async def send_messages(message, usermessage, username, is_private):
   except Exception as exception:
     print(exception)
 
+# define function for sending scheduled messages
 @tasks.loop(seconds=10)
 async def send_scheduled_messages():
   channel = bot.get_channel(1142402656351039538)
@@ -38,13 +41,18 @@ async def send_scheduled_messages():
   if now.hour==15 and now.minute==43:
     await channel.send('Good evening!')
 
+"""
+create class for setting setup_hook for proper concurrent execution 
+of scheduled_messages and other functionality of CREDP Assistant
+"""
 class CREDPAssistant(commands.Bot):
   async def setup_hook(self):
     self.loop.create_task(send_scheduled_messages())
     send_scheduled_messages.start()
 
-bot = CREDPAssistant(command_prefix='!',intents=intents)
+bot = CREDPAssistant(command_prefix='!',intents=intents) # create bot object
 
+# define function to verify that bot is working and read the message content and process it
 def runCREDPAssistant():
   @bot.event
   async def on_ready():

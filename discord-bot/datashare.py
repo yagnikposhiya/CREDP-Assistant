@@ -132,31 +132,37 @@ def getCSVFile(json_data,usermessage,username,prefix):
   current_time = datetime.datetime.now(local_timezone)
   format_time = current_time.strftime('%d-%m-%Y_%I%M%p')
   file = prefix + username_formatted + '_' + format_time + '.csv'
-  file_path = base_path + file
-  
+  file_path = base_path + file # generate file path
+
+  # extract column name as a list
   dataframe = pd.DataFrame(json_data)
   column_names = dataframe.columns.tolist()
   new_column_names = []
-  
+
+  # update column names in the dataframe
   for col in column_names:
     if col in col_name_dict.keys():
       new_column_names.append(col_name_dict[col])
 
   dataframe.columns = new_column_names
 
+  # set uppercase for specific columns
   if usermessage.startswith('/volunteer-atd'):
     dataframe['Standard'].fillna(0, inplace=True)
     dataframe['Standard'] = dataframe['Standard'].astype(int)
     dataframe['Department'] = dataframe['Department'].str.upper()
     dataframe['Institute'] = dataframe['Institute'].str.upper()
     dataframe['Student-ID'] = dataframe['Student-ID'].str.upper()
-  
+
+  # replace 0/1 with yes/no in the present column
   if 'Present' in dataframe.columns:
     if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd') or usermessage.startswith('/student-atdall'):
       dataframe['Present'] = dataframe['Present'].replace({0:'No',1:'Yes'})
 
+  # convert dataframe into the CSV file
   dataframe.to_csv(file_path,index=False)
 
+  # generate pdf file by default and if CSV is provide then generate only CSV file
   params = usermessage.split(' ')
   file_format = params[-1]
   if file_format == 'CSV':
