@@ -59,7 +59,7 @@ async def self_messages(send_channel,botmessage,botname,merged_status=False):
 
       if os.path.isfile(response):
         file = discord.File(response)
-        input_files = [] # again intialize the input_files list as an empty list
+        input_files = [] # again intialize the input_files list as an empty list; at the end
         await send_channel.send(file=file)
       else:
         await send_channel.send('FileNotFoundError:\nThe file you requested could not be located.')
@@ -70,32 +70,32 @@ async def self_messages(send_channel,botmessage,botname,merged_status=False):
 
 # define function for sending scheduled messages
 local_timezone = pytz.timezone('Asia/Kolkata')
-time_stamp_1 = datetime.time(hour=19,minute=52,tzinfo=local_timezone)
-time_stamp_2 = datetime.time(hour=18,minute=41,tzinfo=local_timezone)
-time_stamp_3 = datetime.time(hour=18,minute=30,tzinfo=local_timezone)
-time_stamp_4 = datetime.time(hour=1,minute=15,tzinfo=local_timezone)
-time_stamp_5 = datetime.time(hour=22,minute=15,tzinfo=local_timezone)
-time_stamps = [time_stamp_1,time_stamp_2,time_stamp_3,time_stamp_4,time_stamp_5]
+time_stamp_1 = datetime.time(hour=18,minute=45,tzinfo=local_timezone)
+time_stamps = [time_stamp_1]
 @tasks.loop(time=time_stamps)
 async def send_scheduled_messages():
   global input_files
-  input_files = [] # again assign empty list to the global variable
+  global local_timezone
+  botmessage = ''
+  input_files = [] # again assign empty list to the global variable; in the beginning
+  local_merged_status = False
   channel_name = bot.get_channel(1148543686804783104) # attendance-record channel
-  botmessages = ['/volunteer-atd ','/student-atdsum ','/student-atdall ']
-  merged_status = False
-  today_date = datetime.date.today()
+  # today_date = datetime.date.today()
   # today_date_mdy = today_date.strftime('%d-%m-%Y')
+  current_time = datetime.datetime.now(local_timezone).time()
   today_date_mdy = '06-09-2023'
   botname = str(bot.user.display_name)
+  botmessages = ['/volunteer-atd ','/student-atdsum ','/student-atdall ']
 
-  for index,bmsg in enumerate(botmessages):
-    botmessage = bmsg + today_date_mdy
-    if index == 2:
-      merged_status = True
-    await self_messages(channel_name,botmessage,botname)
-
-  if merged_status:
-    await self_messages(channel_name,botmessage,botname,merged_status)
+  if current_time.hour==18 and current_time.minute==45:
+    for index,bmsg in enumerate(botmessages):
+      botmessage = bmsg + today_date_mdy
+      if index == 2:
+        local_merged_status = True
+      await self_messages(channel_name,botmessage,botname)
+  
+    if local_merged_status:
+      await self_messages(channel_name,botmessage,botname,local_merged_status)
   
 """
 create class for setting setup_hook for proper concurrent execution 
