@@ -70,7 +70,7 @@ async def self_messages(send_channel,botmessage,botname,merged_status=False):
 
 # define function for sending scheduled messages
 local_timezone = pytz.timezone('Asia/Kolkata')
-time_stamp_1 = datetime.time(hour=18,minute=45,tzinfo=local_timezone)
+time_stamp_1 = datetime.time(hour=19,minute=10,tzinfo=local_timezone)
 time_stamps = [time_stamp_1]
 @tasks.loop(time=time_stamps)
 async def send_scheduled_messages():
@@ -80,14 +80,14 @@ async def send_scheduled_messages():
   input_files = [] # again assign empty list to the global variable; in the beginning
   local_merged_status = False
   channel_name = bot.get_channel(1148543686804783104) # attendance-record channel
-  # today_date = datetime.date.today()
-  # today_date_mdy = today_date.strftime('%d-%m-%Y')
+  today_date = datetime.date.today()
+  today_date_mdy = today_date.strftime('%d-%m-%Y')
   current_time = datetime.datetime.now(local_timezone).time()
-  today_date_mdy = '06-09-2023'
+  # today_date_mdy = '06-09-2023'
   botname = str(bot.user.display_name)
   botmessages = ['/volunteer-atd ','/student-atdsum ','/student-atdall ']
 
-  if current_time.hour==18 and current_time.minute==45:
+  if current_time.hour==19 and current_time.minute==10:
     for index,bmsg in enumerate(botmessages):
       botmessage = bmsg + today_date_mdy
       if index == 2:
