@@ -160,7 +160,7 @@ def handleResponse(username, usermessage):
     return 'Hey there!'
 
   if usermessage == '//help':
-    return 'Use /hello, /student-atd, /student-atdsum, /student-atdall, /volunteer-atd commands'
+    return 'Use /hello, /student-atd, /student-atdsum, /student-atdall, /volunteer-atd commands. \nThe CREDP Assistant can also generate attendance reports autonomously.'
 
   if usermessage.startswith('/student-atd') or usermessage.startswith('/student-atdsum'):
     attendance_summary = getStudentAttendanceData(usermessage)
