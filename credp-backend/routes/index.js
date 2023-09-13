@@ -4,6 +4,9 @@ const Student = require('../models/students');
 const VolunteerAttendance = require('../models/volunteer-attendance');
 const User = require('../models/users');
 const sequelize = require('../config/db');
+const attendanceRoute = require('./attendance.route');
+const authRoute = require('./auth.route');
+
 
 const router = express.Router();
 
@@ -13,21 +16,34 @@ StudentAttandance.belongsTo(Student, { foreignKey: 'student_id' });
 User.hasMany(VolunteerAttendance, { foreignKey: 'user_id' });
 VolunteerAttendance.belongsTo(User, { foreignKey: 'user_id' });
 
+//set json parser to parse request body
+router.use(express.json({ limit: '30mb', extended: true }));
+router.use(express.urlencoded({ limit: '30mb', extended: true }));
+router.use('/auth',authRoute);
+
+router.use('/attendance',attendanceRoute);
 //fetch student present , absent and total count in each std for given date
 router.get('/student-attendance/:date', async (req, res) => {
     
     try {
         const { date } = req.params;
-        const studentAttendance = await sequelize.query('SELECT std, COUNT(*) AS total, SUM(present) AS present, SUM(!present) AS absent FROM `student-attendance` WHERE date = :date GROUP BY std', {
+        //take total count of students in each std from students table , and count of present students from student-attendance table std wise
+        const totalStudentCountStdWise = await sequelize.query('select std,count(*) as total from students group by std', {
+            type: sequelize.QueryTypes.SELECT,
+        });
+        const presentStudentCountStdWise = await sequelize.query('select std,count(*) as present from `student-attendance` where date=:date group by std', {
             replacements: { date },
             type: sequelize.QueryTypes.SELECT,
         });
-        const response = studentAttendance.map((item) => {
+        //create an object having std , present , absent and total values for each std
+        const response = totalStudentCountStdWise.map((item) => {
+            const present = presentStudentCountStdWise.find((presentItem) => presentItem.std === item.std);
+            const presentCount = present ? present.present : 0;
             return {
                 std: item.std,
+                present: presentCount,
+                absent: item.total - presentCount,
                 total: item.total,
-                present: +item.present,
-                absent: +item.absent,
             };
         }
         );
@@ -60,7 +76,6 @@ router.get('/student-attendance/:std/:date', async (req, res) => {
             return {
                 name: item.student.name,
                 student_id: item.student_id,
-                present: item.present?1:0,
             };
         }
         );
@@ -112,7 +127,6 @@ router.get('/student-attendance-all/:date', async (req, res) => {
                     name: item.student.name,
                     student_id: item.student_id,
                     std: item.std,
-                    present: item.present?1:0,
                 };
             }
             );

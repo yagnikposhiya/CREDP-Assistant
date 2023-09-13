@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const ejs = require('ejs');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -10,7 +11,8 @@ app.use(express.json({ limit: '30mb', extended: true }));
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 app.use(express.static(path.resolve('./public')));
-
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.get('/', async (_req, res) => {
   res.send('hello world');
 });

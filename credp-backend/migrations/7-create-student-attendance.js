@@ -21,9 +21,6 @@ module.exports = {
       std: {
         type: Sequelize.INTEGER,
       },
-      present: {
-        type: Sequelize.BOOLEAN,
-      },
       date: {
         type: Sequelize.DATEONLY,
       },

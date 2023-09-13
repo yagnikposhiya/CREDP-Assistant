@@ -18,10 +18,6 @@ const StudentAttendance = sequelize.define(
       type: Sequelize.INTEGER,
       field: 'std',
     },
-    present: {
-      type: Sequelize.BOOLEAN,
-      field: 'present',
-    },
     date: {
       type: Sequelize.DATEONLY,
       field: 'date',
