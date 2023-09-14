@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance App - Standard <%= std %></title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+    .details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    input[type="submit"] {
+        width: 100%;
+    }
+</style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center mb-4">Standard <%= std %> Attendance</h2>
+            <form id="form">
+                <input type="hidden" name="std" value="<%= std %>">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% students.forEach(student => { %>
+                            <tr>
+                                <td><%= student.name %></td>
+                                <td>
+                                    <div class="details">
+                                        <input type="radio" name="<%= student.id %>" value="1"> Present
+                                        <input type="radio" name="<%= student.id %>" value="0"> Absent
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary btn-block" id="submit">Submit Attendance</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    const submitButton = document.getElementById('submit');
+    const form = document.getElementById('form');
+
+    submitButton.addEventListener('click', async () => {
+        // Assuming an API endpoint for form submission
+        //give window alert
+        if (!confirm('Are you sure you want to submit attendance?')) {
+            return;
+        }
+        //disable button
+        submitButton.disabled = true;
+        const apiUrl = '/attendance/submit';
+
+        // Gather form data
+        const formData = new FormData(form);
+
+        // Convert form data to a JSON object
+        const formDataObject = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value;
+        });
+
+        // Send a POST request to the API
+        await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formDataObject),
+        })
+
+        const std = document.querySelector('input[name="std"]').value;
+        const currentDate = new Date().toISOString().slice(0, 10);
+        //redirect to home page
+        window.location.href = '/attendance/show?std=' + std + '&date=' + currentDate;
+
+    
+    });
+</script>
+</body>
+</html>

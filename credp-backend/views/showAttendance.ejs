@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance App - Today's Attendance</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center mb-4">Present Students</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Standard</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% attendance.forEach(record => { %>
+                        <tr>
+                            <td><%= record.name %></td>
+                            <td><%= record.std %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            <!-- display present , absent and total count -->
+            <div></div>
+           
+        </div>
+    </div>
+</div>
+<div style="margin-top: 1em; " class="container mt-5">
+    <span >Present Count: <%= count.presentcount %></span>
+    <span style="margin-left: 1em; ">Absent Count: <%= count.absentcount %></span>
+    <span style="margin-left: 1em; ">Total Count <%= count.totalcount %></span>
+
+</div>
+</body>
+</html>

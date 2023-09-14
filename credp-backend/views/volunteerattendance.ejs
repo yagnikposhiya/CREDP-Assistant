@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance App - Volunteer</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+
+.table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+
+    /* Center-align text in table cells */
+    th, td {
+        text-align: center;
+    }
+
+    /* Increase label width for better spacing */
+    .details label {
+        width: 50px;
+    }
+
+    /* Increase font size for better readability */
+    h2 {
+        font-size: 18px;
+    }
+
+    /* Add padding to the container */
+    .container {
+        padding: 10px;
+    }
+
+    /* Center-align the Submit button */
+    input[type="submit"] {
+        width: 100%;
+    }
+    input[type='number']{
+    width: 80px;
+} 
+input[type='time']{
+    width: 80px;
+}
+    .details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    /* */
+</style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center mb-4">Volunteer Attendance</h2>
+            <form id="form">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Volunteer Name</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% volunteers.forEach(volunteer => { %>
+                            <tr>
+                                <td><%= volunteer.name %></td>
+                                <td>
+                                    <div class="details">
+                                        <input type="radio" name="<%= volunteer.id %>-present" value="1" required> Present
+                                        <input type="radio" name="<%= volunteer.id %>-present" value="0" required> Absent
+                                        
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>Std</label>
+                                        <input type="number" name="<%= volunteer.id %>-taught_std" >
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>In Time</label>
+                                        <input type="time" name="<%= volunteer.id %>-in_time">
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>Out Time</label>
+                                        <input type="time" name="<%= volunteer.id%>-out_time">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><hr></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <input type="submit" class="btn btn-primary btn-block" id = "submit" value="Submit Attendance">
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    const submitButton = document.getElementById('submit');
+    const form = document.getElementById('form');
+
+    submitButton.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to submit attendance?')) {
+            return;
+        }
+        submitButton.disabled = true;
+        const apiUrl = '/attendance/vsubmit';
+
+        const formData = new FormData(form);
+        console.log(formData)
+        // Convert form data to a JSON object
+        const formDataObject = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value;
+        });
+
+        // Send a POST request to the API
+        await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formDataObject),
+        })
+
+        const currentDate = new Date().toISOString().slice(0, 10);
+        //redirect to home page
+        window.location.href = `/attendance/vshow?date=`+ currentDate;
+
+    
+    });
+</script>
+</body>
+</html>
