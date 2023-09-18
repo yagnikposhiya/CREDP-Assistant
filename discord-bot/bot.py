@@ -82,12 +82,13 @@ async def send_scheduled_messages():
   channel_name = bot.get_channel(1148543686804783104) # attendance-record channel
   today_date = datetime.date.today()
   today_date_mdy = today_date.strftime('%d-%m-%Y')
+  current_day = today_date.strftime('%A')
   current_time = datetime.datetime.now(local_timezone).time()
   # today_date_mdy = '06-09-2023'
   botname = str(bot.user.display_name)
   botmessages = ['/volunteer-atd ','/student-atdsum ','/student-atdall ']
 
-  if current_time.hour==18 and current_time.minute==50:
+  if (current_time.hour==18 and current_time.minute==50) and (current_day != 'Sunday'):
     for index,bmsg in enumerate(botmessages):
       botmessage = bmsg + today_date_mdy
       if index == 2:
