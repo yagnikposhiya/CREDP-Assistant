@@ -103,7 +103,7 @@ router.get('/volunteer-attendance/:date', async (req, res) => {
     try{
 
         const { date } = req.params;
-        const volunteerAttendance = await sequelize.query('select u.name as student_name , d.name as department,i.name as institute, u.student_id, in_time,out_time,std,task,present from `volunteer-attendance` inner join users u on u.id=user_id inner join departments d on d.id = u.department_id inner join institutes i on i.id=d.institute_id where date=:date', {
+        const volunteerAttendance = await sequelize.query('select u.name as student_name , d.name as department,i.name as institute, u.student_id, in_time,out_time,std,present from `volunteer-attendance` inner join users u on u.id=user_id inner join departments d on d.id = u.department_id inner join institutes i on i.id=d.institute_id where date=:date', {
             replacements: { date },
             type: sequelize.QueryTypes.SELECT,
         });
@@ -116,6 +116,25 @@ router.get('/volunteer-attendance/:date', async (req, res) => {
 
 
 });
+
+router.get('/volunteer-tasks/:date', async (req, res) => {
+    try{
+
+        const { date } = req.params;
+        const volunteerTasks = await sequelize.query('select u.name as student_name,std,task from `volunteer-attendance` inner join users u on u.id=user_id where date=:date and present = 1', {
+            replacements: { date },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        res.json(volunteerTasks);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+
+
+});
+
 
 //get all student attendance for given date with student name , std , student_id , present 
 
