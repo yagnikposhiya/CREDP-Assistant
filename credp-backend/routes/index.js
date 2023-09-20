@@ -27,6 +27,15 @@ router.get('/student-attendance/:date', async (req, res) => {
     
     try {
         const { date } = req.params;
+        //check if date exist in student-attendance table
+        const dateExist = await StudentAttandance.findOne({
+            where: {
+                date,
+            },
+        });
+        if (!dateExist) {
+            return res.json([]);
+        }
         //take total count of students in each std from students table , and count of present students from student-attendance table std wise
         const totalStudentCountStdWise = await sequelize.query('select std,count(*) as total from students group by std', {
             type: sequelize.QueryTypes.SELECT,
