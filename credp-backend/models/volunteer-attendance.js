@@ -34,6 +34,10 @@ const VolunteerAttendance = sequelize.define(
       type: Sequelize.TIME,
       field: 'out_time',
     },
+    task:{
+      type:Sequelize.STRING,
+      field:'task',
+    }
   },
   {
     timestamps: true,
