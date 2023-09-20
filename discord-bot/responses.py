@@ -115,9 +115,9 @@ def getStudentAttendanceData(usermessage):
     return json_format_data
   else:
     if usermessage.startswith('/student-atdsum') or usermessage.startswith('/student-atdall'):
-      return 'Student data is not available for {gd}.'.format(gd=return_date)
+      return 'Student attendance data is not available for {gd}.'.format(gd=return_date)
     elif usermessage.startswith('/student-atd'):
-      return 'Student data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
+      return 'Student attendance data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
 
 
 # fetch volunteer attendance data from the database
@@ -151,7 +151,7 @@ def getVolunteerAttendanceData(usermessage):
   if len(json_format_data) > 0:
     return json_format_data
   else:
-    return 'Volunteer data is not available for {gd}.'.format(gd=input_params[1])
+    return 'Volunteer attendance data is not available for {gd}.'.format(gd=input_params[1])
 
 # define the function to handle the user messages and CREDP Assistant responses
 def handleResponse(username, usermessage):
