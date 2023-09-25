@@ -98,14 +98,13 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
   table.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, -1), 'TimesNewRoman')]))
 
   # add bounding box to the entry which has "No" value in the "Present" column
-  if 'Present' in dataframe.columns:
-    if usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd') or usermessage.startswith('/student-atdall'):
+  if ('Present' in dataframe.columns) and (usermessage.startswith('/student-atd ') or usermessage.startswith('/volunteer-atd') or usermessage.startswith('/student-atdall')):
       column_index = dataframe.columns.get_loc('Present')
       for i, row in enumerate(table_data[1:], start=1):
         if row[column_index] == 'No':
           table.setStyle(TableStyle([('BACKGROUND', (0, i), (-1, i), (0.7,0.7,0.7)),
                                      ('TEXTCOLOR', (0, i), (-1, i), colors.black),
-                                     ('INNERGRID', (0, i), (-1, i), 1, (0.7,0.7,0.7))]))
+                                     ('INNERGRID', (0, i), (-1, i), 1, (0.7,0.7,0.7))]))        
   content.append(table)
 
   # add extra metadata for student attendance summary
