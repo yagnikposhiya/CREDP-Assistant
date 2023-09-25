@@ -52,7 +52,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
     date_of_atd = usermessage.split(' ')
     date_of_atd = date_of_atd[1]
   elif prefix == 'VT_':
-    atd_string = 'Volunteer Task'
+    atd_string = 'Subjects Taught'
     date_of_atd = usermessage.split(' ')
     date_of_atd = date_of_atd[1]
 
