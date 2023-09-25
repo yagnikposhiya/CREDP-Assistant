@@ -219,7 +219,7 @@ def handleResponse(username, usermessage):
     else:
       return attendance_summary
 
-  if usermessage.startswith('/volunteer-task'):
+  if usermessage.startswith('/volunteer-subtaught'):
     attendance_summary = getVolunteerTaskData(usermessage)
     if isinstance(attendance_summary,list):
       response_file_path = datashare.getCSVFile(attendance_summary,usermessage,username,'VT_')
