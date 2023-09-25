@@ -153,6 +153,39 @@ def getVolunteerAttendanceData(usermessage):
   else:
     return 'Volunteer attendance data is not available for {gd}.'.format(gd=input_params[1])
 
+# fetch volunteer task data from the database
+def getVolunteerTaskData(usermessage):
+  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  base_link = 'https://credp-backend.onrender.com/volunteer-tasks/'
+  link = ''
+
+  try:
+    input_params = usermessage.split(' ')
+    day = getDayFromDate(input_params[1])
+
+    if day not in days:
+      return day
+
+    YMD_format_date = getDateInYMDFormat(input_params[1])
+
+    if len(input_params) < 4:
+      link = base_link + YMD_format_date
+    else:
+      return str('CommandFormatError:\nOnly date in DD-MM-YYYY format is acceptable for /volunteer-atd command.')
+  
+  except:
+    return str('CommandFormatError:\nDate not found, must be in DD-MM-YYYY format.')
+
+  # fetch data from the database after generation of link
+  fetchd_data = requests.get(link)
+  json_format_data = json.loads(fetchd_data.text)
+
+  # handle the case when data not found in the database
+  if len(json_format_data) > 0:
+    return json_format_data
+  else:
+    return 'Volunteer attendance data is not available for {gd}.'.format(gd=input_params[1])
+
 # define the function to handle the user messages and CREDP Assistant responses
 def handleResponse(username, usermessage):
 
@@ -182,6 +215,14 @@ def handleResponse(username, usermessage):
     attendance_summary = getVolunteerAttendanceData(usermessage)
     if isinstance(attendance_summary,list):
       response_file_path = datashare.getCSVFile(attendance_summary,usermessage,username,'V_')
+      return response_file_path
+    else:
+      return attendance_summary
+
+  if usermessage.startswith('/volunteer-task'):
+    attendance_summary = getVolunteerTaskData(usermessage)
+    if isinstance(attendance_summary,list):
+      response_file_path = datashare.getCSVFile(attendance_summary,usermessage,username,'VT_')
       return response_file_path
     else:
       return attendance_summary

@@ -51,6 +51,10 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
     atd_string = 'Volunteer Attendance'
     date_of_atd = usermessage.split(' ')
     date_of_atd = date_of_atd[1]
+  elif prefix == 'VT_':
+    atd_string = 'Volunteer Task'
+    date_of_atd = usermessage.split(' ')
+    date_of_atd = date_of_atd[1]
 
   # set the font for the whole pdf file
   pdfmetrics.registerFont(TTFont('TimesNewRoman', 'fonts/TimesNewRoman/times-new-roman.ttf'))
