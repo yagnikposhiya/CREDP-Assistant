@@ -128,7 +128,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
 # create CSV file from the dataframe
 def getCSVFile(json_data,usermessage,username,prefix):
   col_name_dict = {'std':'Standard','total':'Total','present':'Present','absent':'Absent','name':'Name','student_id':'Student-ID',
-                  'student_name':'Student Name', 'department':'Department','institute':'Institute','in_time':'In-Time','out_time':'Out-Time','task':'Task'}
+                  'student_name':'Student Name', 'department':'Department','institute':'Institute','in_time':'In-Time','out_time':'Out-Time','task':'Task', 'subject':'Subject','chapter_no':'Chapter No.','topic':'Topic'}
   
   base_path = 'attendance-sheet-csv/'
   username_formatted = ''.join(username.split())

@@ -86,7 +86,7 @@ async def send_scheduled_messages():
   current_time = datetime.datetime.now(local_timezone).time()
   # today_date_mdy = '06-09-2023'
   botname = str(bot.user.display_name)
-  botmessages = ['/volunteer-atd ','/volunteer-task ','/student-atdsum ','/student-atdall ']
+  botmessages = ['/volunteer-atd ','/volunteer-subtaught ','/student-atdsum ','/student-atdall ']
 
   if (current_time.hour==18 and current_time.minute==50) and (current_day != 'Sunday'):
     for index,bmsg in enumerate(botmessages):
