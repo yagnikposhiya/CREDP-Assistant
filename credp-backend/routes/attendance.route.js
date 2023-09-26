@@ -216,7 +216,7 @@ router.post('/vsubmit', async (req, res) => {
   }
 
     for (const volunteer of volunteerData) {
-        const sql = "INSERT INTO `volunteer-attendance` (user_id,date, present, in_time, out_time, std,subject,chapter_no,topic) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        const sql = "INSERT INTO `volunteer-attendance` (user_id,date, present, in_time, out_time, std,subject,chapter_no,topic) VALUES (?,?,?,?,?,?,?,?,?)";
         await sequelize.query(sql, { replacements: [volunteer.volunteer_id, currentDate, volunteer.present, volunteer.in_time, volunteer.out_time, volunteer.taught_std,volunteer.subject,volunteer.chapter_no,volunteer.topic], type: sequelize.QueryTypes.INSERT })
             .then((results) => {
             }
