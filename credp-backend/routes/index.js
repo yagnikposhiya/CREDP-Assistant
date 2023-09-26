@@ -121,7 +121,7 @@ router.get('/volunteer-tasks/:date', async (req, res) => {
     try{
 
         const { date } = req.params;
-        const volunteerTasks = await sequelize.query('select u.name as student_name,std,task from `volunteer-attendance` inner join users u on u.id=user_id where date=:date and present = 1', {
+        const volunteerTasks = await sequelize.query('select u.name as student_name,std,subject,chapter_no,topic from `volunteer-attendance` inner join users u on u.id=user_id where date=:date and present = 1', {
             replacements: { date },
             type: sequelize.QueryTypes.SELECT,
         });

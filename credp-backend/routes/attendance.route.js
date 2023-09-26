@@ -186,7 +186,9 @@ router.post('/vsubmit', async (req, res) => {
           in_time: '',
           out_time: '',
           taught_std: 0,
-          task:''
+          subject:'',
+          chapter_no:0,
+          topic:'',
         };
         volunteerData.push(volunteer);
       }
@@ -201,15 +203,21 @@ router.post('/vsubmit', async (req, res) => {
       } else if (fieldName === 'taught_std') {
         volunteer.taught_std = parseInt(requestData[key])? parseInt(requestData[key]) : 0;
       }
-      else if(fieldName === 'task'){
-        volunteer.task = requestData[key]?requestData[key] : '';
+      else if(fieldName === 'subject'){
+        volunteer.subject = requestData[key]?requestData[key] : '';
+      }
+      else if(fieldName === 'chapter_no'){
+        volunteer.chapter_no = parseInt(requestData[key])? parseInt(requestData[key]) : 0;
+      }
+      else if(fieldName === 'topic'){
+        volunteer.topic = requestData[key]?requestData[key] : '';
       }
     }
   }
 
     for (const volunteer of volunteerData) {
-        const sql = "INSERT INTO `volunteer-attendance` (user_id,date, present, in_time, out_time, std,task) VALUES (?,?,?,?,?,?,?)";
-        await sequelize.query(sql, { replacements: [volunteer.volunteer_id, currentDate, volunteer.present, volunteer.in_time, volunteer.out_time, volunteer.taught_std,volunteer.task], type: sequelize.QueryTypes.INSERT })
+        const sql = "INSERT INTO `volunteer-attendance` (user_id,date, present, in_time, out_time, std,subject,chapter_no,topic) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        await sequelize.query(sql, { replacements: [volunteer.volunteer_id, currentDate, volunteer.present, volunteer.in_time, volunteer.out_time, volunteer.taught_std,volunteer.subject,volunteer.chapter_no,volunteer.topic], type: sequelize.QueryTypes.INSERT })
             .then((results) => {
             }
             )
@@ -229,7 +237,7 @@ router.post('/vsubmit', async (req, res) => {
 
 router.get('/vshow', async (req, res) => {
     const currentDate = req.query.date;
-    const sql = "SELECT u.name , in_time,out_time,std,task,present FROM `volunteer-attendance` INNER JOIN users u ON u.id=user_id  WHERE date=?";
+    const sql = "SELECT u.name , in_time,out_time,std,subject,chapter_no,topic,present FROM `volunteer-attendance` INNER JOIN users u ON u.id=user_id  WHERE date=?";
     await sequelize.query(sql, { replacements: [currentDate], type: sequelize.QueryTypes.SELECT })
         .then((results) => {
             res.render('volunteershowAttendance', { attendance: results });

@@ -36,12 +36,21 @@ module.exports = {
         type: Sequelize.TIME,
         allowNull: true,
       },
-      task:{
-        type:Sequelize.STRING,
-        allowNull:true,
-        defaultValue:null,
+      subject: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,        
       },
-
+      chapter_no: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null,   
+      },
+      topic:{
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,   
+      },
       created_at: {
         allowNull: true,
         type: Sequelize.DATE,
