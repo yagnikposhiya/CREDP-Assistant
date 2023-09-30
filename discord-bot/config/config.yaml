@@ -1,0 +1,54 @@
+# Author: Yagnik Poshiya
+# GitHub: @yagnikposhiya
+# Charusat Rural Education Development Program
+# Charotar University of Science and Technology
+
+link:
+  student_std_sum_atd_base_link: https://credp-backend.onrender.com/student-attendance/
+  student_std_all_base_link: https://credp-backend.onrender.com/student-attendance-all/
+  volunteer_atd_base_link: https://credp-backend.onrender.com/volunteer-attendance/
+  volunteer_sub_taught_base_link: https://credp-backend.onrender.com/volunteer-tasks/
+
+standards_and_days:
+  days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  standards: ['1','2','3','4','5','6','7','8','9','10','11','12']
+
+timezone:
+  local_timezone: Asia/Kolkata
+  off_day: Sunday
+
+status_based_on_prefix:
+  normal_student_atd_string: Student Attendance
+  all_student_atd_string: Student Attendance | Std. All
+  specific_std_stduent_atd_string: Student Attendance | Std. 
+  normal_volunteer_atd_string: Volunteer Attendance
+  subject_taught_volunteer_atd_string: Subject Taughts
+
+PDF_CSV_formatting:
+  
+  csv:
+    csv_base_path: attendance-sheet-csv/
+  
+  pdf:
+    pdf_base_path: attendance-sheet-pdf/
+  
+  columnnames:
+    col_dict: {std: Standard,
+    total: Total,
+    present: Present,
+    absent: Absent,
+    name: Name,
+    student_id: Student-ID,
+    student_name: Student Name,
+    department: Department,
+    institute: Institute,
+    in_time: In-Time,
+    out_time: Out-Time,
+    task: Task,
+    subject: Subject,
+    chapter_no: Chapter No.,
+    topic: Topic}
+
+  additional:
+    credp_logo: logo/credp-high-resolution.jpg
+    heading_text: Charusat Rural Education Development Program (CREDP)

@@ -6,9 +6,14 @@ Charotar University of Science and Technology
 """
 
 import json
+import yaml
 import datetime
 import requests
 import datashare
+
+# load config file
+with open('config/config.yml', 'r') as stream:
+  config = yaml.safe_load(stream)
 
 
 # get date in specific format: from DMY to YMD
@@ -32,9 +37,9 @@ def getDayFromDate(date):
 def getStudentAttendanceData(usermessage):
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   if usermessage.startswith('/student-atdall'):
-    base_link = 'https://credp-backend.onrender.com/student-attendance-all/'
+    base_link = config['link']['student_std_all_base_link']
   else:
-    base_link = 'https://credp-backend.onrender.com/student-attendance/'
+    base_link = config['link']['student_std_sum_atd_base_link']
   link = ''
   input_date = ''
 
@@ -84,7 +89,7 @@ def getStudentAttendanceData(usermessage):
   # for specific standard student attendance (/student-atd)
   elif usermessage.startswith('/student-atd'):
     try:
-      standards = ['1','2','3','4','5','6','7','8','9','10','11','12']
+      standards = config['standards_and_days']['standards']
       input_params = usermessage.split(' ')
       day = getDayFromDate(input_params[1])
 
@@ -122,8 +127,8 @@ def getStudentAttendanceData(usermessage):
 
 # fetch volunteer attendance data from the database
 def getVolunteerAttendanceData(usermessage):
-  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  base_link = 'https://credp-backend.onrender.com/volunteer-attendance/'
+  days = config['standards_and_days']['days']
+  base_link = config['link']['volunteer_atd_base_link']
   link = ''
 
   try:
@@ -155,8 +160,8 @@ def getVolunteerAttendanceData(usermessage):
 
 # fetch volunteer task data from the database
 def getVolunteerTaskData(usermessage):
-  days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  base_link = 'https://credp-backend.onrender.com/volunteer-tasks/'
+  days = config['standards_and_days']['days']
+  base_link = config['link']['volunteer_sub_taught_base_link']
   link = ''
 
   try:

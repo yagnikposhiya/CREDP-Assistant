@@ -5,6 +5,7 @@ Charusat Rural Education Development Program
 Charotar University of Science and Technology
 """
 import os
+import yaml
 import pytz
 import discord
 import asyncio
@@ -12,8 +13,12 @@ import datetime
 import responses
 import datashare
 from discord.ext import commands, tasks
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
+
+# load config file
+with open('config/config.yml', 'r') as stream:
+    config = yaml.safe_load(stream)
 
 # create intents for CREDP Assistant
 intents = discord.Intents.default()
@@ -69,7 +74,7 @@ async def self_messages(send_channel,botmessage,botname,merged_status=False):
 
 
 # define function for sending scheduled messages
-local_timezone = pytz.timezone('Asia/Kolkata')
+local_timezone = pytz.timezone(config['timezone']['local_timezone'])
 time_stamp_1 = datetime.time(hour=18,minute=50,tzinfo=local_timezone)
 time_stamps = [time_stamp_1]
 @tasks.loop(time=time_stamps)
@@ -88,7 +93,7 @@ async def send_scheduled_messages():
   botname = str(bot.user.display_name)
   botmessages = ['/volunteer-atd ','/volunteer-subtaught ','/student-atdsum ','/student-atdall ']
 
-  if (current_time.hour==18 and current_time.minute==50) and (current_day != 'Sunday'):
+  if (current_time.hour==18 and current_time.minute==50) and (current_day != config['timezone']['off_day']):
     for index,bmsg in enumerate(botmessages):
       botmessage = bmsg + today_date_mdy
       if index == 2:
