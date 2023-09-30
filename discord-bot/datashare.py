@@ -5,6 +5,7 @@ Charusat Rural Education Development Program
 Charotar University of Science and Technology
 """
 
+import os
 import csv
 import yaml
 import pytz
@@ -28,9 +29,13 @@ with open('config/config/yaml','r') as stream:
 
 def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
   # required variables
-  base_path = 'attendance-sheet-pdf/'
+  base_path = config['PDF_CSV_formatting']['pdf']['pdf_base_path']
+
+  if not os.path.exists(base_path): # make directory if it does not exist
+    os.makedirs(base_path)
+  
   username_formatted = ''.join(username.split())
-  local_timezone = pytz.timezone('Asia/Kolkata')
+  local_timezone = pytz.timezone(config['timezone']['local_timezone'])
   current_time = datetime.datetime.now(local_timezone)
   format_time = current_time.strftime('%d-%m-%Y_%I%M%S%p')
   file = prefix + username_formatted + '_' + format_time + '.pdf'
@@ -133,8 +138,11 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
 # create CSV file from the dataframe
 def getCSVFile(json_data,usermessage,username,prefix):
   col_name_dict = config['PDF_CSV_formatting']['columnnames']['col_dict']
-  
   base_path = config['PDF_CSV_formatting']['csv']['csv_base_path']
+
+  if not os.path.exists(base_path): # make directory if it does not exist
+    os.makedirs(base_path)
+
   username_formatted = ''.join(username.split())
   local_timezone = pytz.timezone(config['timezone']['local_timezone'])
   current_time = datetime.datetime.now(local_timezone)
@@ -182,6 +190,10 @@ def getCSVFile(json_data,usermessage,username,prefix):
 
 def PDFMerger(input_files_path,username):
   base_path = config['PDF_CSV_formatting']['pdf']['pdf_base_path']
+
+  if not os.path.exists(base_path): # make directory if it does not exist
+    os.makedirs(base_path)
+  
   prefix = 'VS_'
   username_formatted = ''.join(username.split())
   local_timezone = pytz.timezone(config['timezone']['local_timezone'])
