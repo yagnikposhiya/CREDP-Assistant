@@ -25,6 +25,8 @@ status_based_on_prefix:
   subject_taught_volunteer_atd_string: Subject Taughts
 
 PDF_CSV_formatting:
+
+  font_path: fonts/TimesNewRoman/times-new-roman.ttf
   
   csv:
     csv_base_path: attendance-sheet-csv/

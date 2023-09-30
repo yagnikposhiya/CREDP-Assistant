@@ -67,7 +67,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
     date_of_atd = date_of_atd[1]
 
   # set the font for the whole pdf file
-  pdfmetrics.registerFont(TTFont('TimesNewRoman', 'fonts/TimesNewRoman/times-new-roman.ttf'))
+  pdfmetrics.registerFont(TTFont('TimesNewRoman', config['PDF_CSV_formatting']['font_path']))
   styles = getSampleStyleSheet()
   custom_font_style = styles['Normal'].clone('CustomFontStyle')
   custom_font_style.fontName = 'TimesNewRoman'
