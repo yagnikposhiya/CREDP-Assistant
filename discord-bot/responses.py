@@ -12,7 +12,7 @@ import requests
 import datashare
 
 # load config file
-with open('config/config.yml', 'r') as stream:
+with open('config/config.yaml', 'r') as stream:
   config = yaml.safe_load(stream)
 
 

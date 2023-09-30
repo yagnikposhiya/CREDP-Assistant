@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # load config file
-with open('config/config.yml', 'r') as stream:
+with open('config/config.yaml', 'r') as stream:
     config = yaml.safe_load(stream)
 
 # create intents for CREDP Assistant

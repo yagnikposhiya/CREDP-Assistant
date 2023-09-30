@@ -33,21 +33,21 @@ PDF_CSV_formatting:
     pdf_base_path: attendance-sheet-pdf/
   
   columnnames:
-    col_dict: {std: Standard,
-    total: Total,
-    present: Present,
-    absent: Absent,
-    name: Name,
-    student_id: Student-ID,
-    student_name: Student Name,
-    department: Department,
-    institute: Institute,
-    in_time: In-Time,
-    out_time: Out-Time,
-    task: Task,
-    subject: Subject,
-    chapter_no: Chapter No.,
-    topic: Topic}
+    col_dict: {'std': 'Standard',
+    'total': 'Total',
+    'present': 'Present',
+    'absent': 'Absent',
+    'name': 'Name',
+    'student_id': 'Student-ID',
+    'student_name': 'Student Name',
+    'department': 'Department',
+    'institute': 'Institute',
+    'in_time': 'In-Time',
+    'out_time': 'Out-Time',
+    'task': 'Task',
+    'subject': 'Subject',
+    'chapter_no': 'Chapter No.',
+    'topic': 'Topic'}
 
   additional:
     credp_logo: logo/credp-high-resolution.jpg
