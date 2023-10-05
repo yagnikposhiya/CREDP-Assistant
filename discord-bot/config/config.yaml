@@ -4,10 +4,10 @@
 # Charotar University of Science and Technology
 
 link:
-  student_std_sum_atd_base_link: https://credp-backend.onrender.com/student-attendance/
-  student_std_all_base_link: https://credp-backend.onrender.com/student-attendance-all/
-  volunteer_atd_base_link: https://credp-backend.onrender.com/volunteer-attendance/
-  volunteer_sub_taught_base_link: https://credp-backend.onrender.com/volunteer-tasks/
+  student_std_sum_atd_base_link: http://127.0.0.1:8080/student-attendance/
+  student_std_all_base_link: http://127.0.0.1:8080/student-attendance-all/
+  volunteer_atd_base_link: http://127.0.0.1:8080/volunteer-attendance/
+  volunteer_sub_taught_base_link: http://127.0.0.1:8080/volunteer-tasks/
 
 standards_and_days:
   days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
