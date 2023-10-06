@@ -34,13 +34,16 @@
     .container {
         padding: 10px;
     }
-
+    input[type="number"]{
+        margin-left: auto;
+    }
     /* Center-align the Submit button */
     input[type="submit"] {
         width: 100%;
     }
-    input[type='number']{
-    width: 80px;
+   
+    input[type='text']{
+    margin-left: 10px;
 } 
 input[type='time']{
     width: 80px;
@@ -90,6 +93,21 @@ input[type='time']{
                                     <div class="details">
                                         <label>Out Time</label>
                                         <input type="time" name="<%= volunteer.id%>-out_time">
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>Subject</label>
+                                        <input type="text" name="<%= volunteer.id %>-subject">
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>Chapter_No</label>
+                                        <input type="number" name="<%= volunteer.id %>-chapter_no">
+                                    </div>
+                                    <hr>
+                                    <div class="details">
+                                        <label>Topic</label>
+                                        <input type="text" name="<%= volunteer.id %>-topic">
                                     </div>
                                 </td>
                             </tr>

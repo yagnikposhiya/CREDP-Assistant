@@ -27,6 +27,15 @@ router.get('/student-attendance/:date', async (req, res) => {
     
     try {
         const { date } = req.params;
+        //check if date exist in student-attendance table
+        const dateExist = await StudentAttandance.findOne({
+            where: {
+                date,
+            },
+        });
+        if (!dateExist) {
+            return res.json([]);
+        }
         //take total count of students in each std from students table , and count of present students from student-attendance table std wise
         const totalStudentCountStdWise = await sequelize.query('select std,count(*) as total from students group by std', {
             type: sequelize.QueryTypes.SELECT,
@@ -107,6 +116,25 @@ router.get('/volunteer-attendance/:date', async (req, res) => {
 
 
 });
+
+router.get('/volunteer-tasks/:date', async (req, res) => {
+    try{
+
+        const { date } = req.params;
+        const volunteerTasks = await sequelize.query('select u.name as student_name,std,subject,chapter_no,topic from `volunteer-attendance` inner join users u on u.id=user_id where date=:date and present = 1', {
+            replacements: { date },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        res.json(volunteerTasks);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+
+
+});
+
 
 //get all student attendance for given date with student name , std , student_id , present 
 

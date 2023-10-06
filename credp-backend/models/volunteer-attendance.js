@@ -34,6 +34,18 @@ const VolunteerAttendance = sequelize.define(
       type: Sequelize.TIME,
       field: 'out_time',
     },
+    subject: {
+      type: Sequelize.STRING,
+      field: 'subject',
+    },
+    chapter_no: {
+      type: Sequelize.INTEGER,
+      field: 'chapter_no',
+    },
+    topic:{
+      type: Sequelize.STRING,
+      field: 'topic',
+    }
   },
   {
     timestamps: true,
