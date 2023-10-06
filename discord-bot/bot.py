@@ -75,7 +75,7 @@ async def self_messages(send_channel,botmessage,botname,merged_status=False):
 
 # define function for sending scheduled messages
 local_timezone = pytz.timezone(config['timezone']['local_timezone'])
-time_stamp_1 = datetime.time(hour=18,minute=26,tzinfo=local_timezone)
+time_stamp_1 = datetime.time(hour=18,minute=40,tzinfo=local_timezone)
 time_stamps = [time_stamp_1]
 @tasks.loop(time=time_stamps)
 async def send_scheduled_messages():
@@ -93,7 +93,7 @@ async def send_scheduled_messages():
   botname = str(bot.user.display_name)
   botmessages = ['/volunteer-atd ','/volunteer-subtaught ','/student-atdsum ','/student-atdall ']
 
-  if (current_time.hour==18 and current_time.minute==26) and (current_day != config['timezone']['off_day']):
+  if (current_time.hour==18 and current_time.minute==40) and (current_day != config['timezone']['off_day']):
     for index,bmsg in enumerate(botmessages):
       botmessage = bmsg + today_date_mdy
       if index == 3:
