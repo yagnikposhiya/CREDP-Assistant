@@ -36,10 +36,10 @@ def getDayFromDate(date):
 # fetch student attendance data from the database
 def getStudentAttendanceData(usermessage):
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  if usermessage.startswith('/student-atdall'):
-    base_link = config['link']['student_std_all_base_link']
-  else:
+  if usermessage.startswith('/student-atdsum'):
     base_link = config['link']['student_std_sum_atd_base_link']
+  else:
+    base_link = config['link']['student_std_all_base_link']
   link = ''
   input_date = ''
 
