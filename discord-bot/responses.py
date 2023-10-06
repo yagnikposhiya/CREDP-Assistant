@@ -119,8 +119,10 @@ def getStudentAttendanceData(usermessage):
   if len(json_format_data) > 0:
     return json_format_data
   else:
-    if usermessage.startswith('/student-atdsum') or usermessage.startswith('/student-atdall'):
-      return 'Student attendance data is not available for {gd}.'.format(gd=return_date)
+    if usermessage.startswith('/student-atdsum'):
+      return 'Student summary attendance data is not available for {gd}.'.format(gd=return_date)
+    elif usermessage.startswith('/student-atdall'):
+      return 'Student attendance data for all standard is not available for {gd}.'.format(gd=return_date)
     elif usermessage.startswith('/student-atd'):
       return 'Student attendance data is not available for {gd} & {cls} standard.'.format(gd=return_date,cls=input_params[2])
 
