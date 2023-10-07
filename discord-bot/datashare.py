@@ -57,7 +57,7 @@ def CSVToPDF(file_path_csv,dataframe,usermessage,username,prefix):
       params = usermessage.split(' ')
       atd_string = 'Student Attendance | Std. ' + str(params[2])
       date_of_atd = params[1]
-  elif prefix == 'V_':
+  elif prefix == 'VA_':
     atd_string = 'Volunteer Attendance'
     date_of_atd = usermessage.split(' ')
     date_of_atd = date_of_atd[1]
